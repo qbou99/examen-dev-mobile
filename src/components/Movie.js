@@ -112,7 +112,7 @@ const Movie = ({ route, watchedMovies, dispatch }) => {
                 Runtime
               </Text>
               <Text style={styles.textContent}>
-                {movie.runtime}
+                {movie.runtime + " min"}
               </Text>
               <Text style={styles.textTitle}>
                 Overview
