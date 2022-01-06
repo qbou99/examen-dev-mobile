@@ -1,4 +1,4 @@
-const API_KEY = '8e8d3f72743b301fd9b4b0ef20cd0ba5';
+const API_KEY = 'f60dc1588d1b92e483f83fa137b9f5ab';
 
 export async function getPopularMovies(page = 1) {
   try {
