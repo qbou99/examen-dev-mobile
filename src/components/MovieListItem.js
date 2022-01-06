@@ -38,7 +38,7 @@ const MovieListItem = ({ onClick, movieData }) => {
         <View style={styles.statsContainer}>
           <View style={styles.statContainer}>
             <Text style={[styles.data, styles.stat]}>
-              {movieData.vote_average}
+              {"Rating: " + movieData.vote_average}
             </Text>
           </View>
         </View>
