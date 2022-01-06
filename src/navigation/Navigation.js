@@ -24,7 +24,7 @@ function searchStackScreens() {
       <SearchNavigation.Screen
         name="ViewMovie"
         component={Movie}
-        options={{ title: 'Movie' }}
+        options={{ title: 'Film' }}
       />
     </SearchNavigation.Navigator>
   )
@@ -43,7 +43,7 @@ function favStackScreens() {
       <FavNavigation.Screen
         name="ViewMovie"
         component={Movie}
-        options={{ title: 'Movie' }}
+        options={{ title: 'Film' }}
       />
     </FavNavigation.Navigator>
   )
@@ -65,7 +65,7 @@ function RootStack() {
         })}
       />
       <TabNavigation.Screen
-        name="Favoris"
+        name="Watchlist"
         component={favStackScreens}
         options={() => ({
           tabBarIcon: ({ color }) => {
