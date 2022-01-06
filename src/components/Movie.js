@@ -2,22 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, ActivityIndicator, ScrollView, Image, Button } from 'react-native';
 import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
+import { getMovieDetails, getMovieCredits } from '../api/TMDB';
 
-import DisplayError from '../components/DisplayError';
+import DisplayError from './DisplayError';
 
-const Restaurant = ({ route, favRestaurants, dispatch }) => {
+const Movie = ({ route, watchedMovies, dispatch }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [restaurant, setRestaurant] = useState(null);
+  const [movie, setMovie] = useState(null);
+  const [credits, setCredits] = useState(null);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    requestRestaurant();
+    requestMovie();
   }, []); // Uniquement à l'initialisation
 
   // Pourrait être directement déclarée dans useEffect
-  const requestRestaurant = async () => {
+  const requestMovie = async () => {
     try {
-
+      const tmdbResult = await getMovieDetails(route.params.movieID);
+      const castResult = await getMovieCredits(route.params.movieID);
+      setMovie(tmdbResult);
+      setCredits(castResult.cast);
       setIsLoading(false);
     } catch (error) {
       setIsError(true);
@@ -25,126 +30,106 @@ const Restaurant = ({ route, favRestaurants, dispatch }) => {
   }
 
   // On pourrait définir les actions dans un fichier à part
-  const saveRestaurant = async () => {
-    const action = { type: 'SAVE_RESTAURANT', value: route.params.restaurantID };
+  const saveMovie = async () => {
+    const action = { type: 'SAVE_MOVIE', value: route.params.MovieID };
     dispatch(action);
-    let toast = Toast.show('Restaurant ajouté aux favoris', {
+    let toast = Toast.show('Movie ajouté aux favoris', {
       duration: Toast.durations.LONG,
     });
   }
 
-  const unsaveRestaurant = async () => {
-    const action = { type: 'UNSAVE_RESTAURANT', value: route.params.restaurantID };
+  const unsaveMovie = async () => {
+    const action = { type: 'UNSAVE_MOVIE', value: route.params.MovieID };
     dispatch(action);
-    let toast = Toast.show('Restaurant retiré des favoris', {
+    let toast = Toast.show('Movie retiré des favoris', {
       duration: Toast.durations.LONG,
     });
   }
 
-  const displayRestaurantImage = () => {
-    if (restaurant.featured_image) {
+  const displayMovieImage = () => {
+    /*if (Movie.featured_image) {
       return (
-        <Image style={styles.restaurantImage}
-          source={{ uri: restaurant.featured_image }} />
+        <Image style={styles.MovieImage}
+          source={{ uri: Movie.featured_image }} />
       );
-    };
+    };*/
     return (
-      <View style={styles.containerNoRestaurantImage}>
+      <View style={styles.containerNoMovieImage}>
       </View>
     );
   };
 
-  const displayTimings = () => {
-    let timingsList = restaurant.timings?.split(",");
-    let timingsJSX = [];
-    timingsList?.forEach((timing, index) => {
-      timingsJSX.push(<Text key={index} style={styles.textContent}>{timing}</Text>)
-    });
-    return (
-      <View style={{ marginBottom: 16, }}>
-        {timingsJSX}
-      </View>
-    );
-  }
-
-  const displaySaveRestaurant = () => {
-    if (favRestaurants.findIndex(i => i === route.params.restaurantID) !== -1) {
-      // Le restaurant est sauvegardé
+  const displaySaveMovie = () => {
+    if (watchedMovies.findIndex(i => i === route.params.MovieID) !== -1) {
+      // Le Movie est sauvegardé
       return (
         <Button
-          title='Retirer des favoris'
-          onPress={unsaveRestaurant}
+          title='Watched'
+          onPress={unsaveMovie}
         />
       );
     }
-    // Le restaurant n'est pas sauvegardé
+    // Le Movie n'est pas sauvegardé
     return (
       <Button
-        title='Ajouter aux favoris'
-        onPress={saveRestaurant}
+        title='Watch'
+        onPress={saveMovie}
       />
     );
   }
 
   return (
     <View style={styles.container}>
-      {isError ?
-        (<DisplayError message='Impossible de récupérer les données du restaurants' />) :
-        (isLoading ?
+        {(isLoading ?
           (<View style={styles.containerLoading}>
             <ActivityIndicator size="large" />
           </View>) :
 
           (<ScrollView style={styles.containerScroll}>
-            {displayRestaurantImage()}
+            {displayMovieImage()}
             <View style={styles.containerCardTop}>
               <View style={styles.containerEstab}>
                 <Text style={styles.textName}>
-                  {restaurant.name}
+                  {movie.title}
                 </Text>
                 <Text style={styles.textContent}
                   numberOfLines={1}>
-                  {restaurant.establishment?.join()}
-                </Text>
-              </View>
-              <View style={styles.containerNoteAndVotes}>
-                <View style={[styles.containerNote, { backgroundColor: ('#' + restaurant.user_rating?.rating_color) }]}>
-                  <Text style={styles.textNote}>
-                    {restaurant.user_rating?.aggregate_rating}
-                  </Text>
-                  <Text style={styles.textMaxNote}>
-                    /5
-                  </Text>
-                </View>
-                <Text style={styles.textVotes}>
-                  {restaurant.user_rating?.votes} votes
+                  {movie.establishment?.join()}
                 </Text>
               </View>
             </View>
             <View style={styles.containerCardBottom}>
               <Text style={[styles.textTitle, { marginTop: 0 }]}>
-                Cuisines
+                Release
               </Text>
               <Text style={styles.textContent}>
-                {restaurant.cuisines}
+                {movie.release_date}
               </Text>
               <Text style={styles.textTitle}>
-                Numéro(s) de téléphone
+                Genre
               </Text>
               <Text style={styles.textContent}>
-                {restaurant.phone_numbers}
+                {movie.genres.reduce((previousValue, currentValue) => previousValue + ', ' + currentValue.name, "").substring(2)}
               </Text>
               <Text style={styles.textTitle}>
-                Adresse
+                Runtime
               </Text>
               <Text style={styles.textContent}>
-                {restaurant.location?.address}
+                {movie.runtime}
               </Text>
               <Text style={styles.textTitle}>
-                Horaires d'ouverture
+                Overview
               </Text>
-              {displayTimings()}
-              {displaySaveRestaurant()}
+              <Text style={styles.textContent}>
+                {movie.overview}
+              </Text>
+              <Text style={styles.textTitle}>
+                Cast
+              </Text>
+              <Text style={styles.textContent}>
+                {credits.reduce((previousValue, currentValue) => previousValue + ', ' + currentValue.name, "").substring(2)}
+              </Text>
+              {displaySaveMovie()}
             </View>
           </ScrollView>)
         )}
@@ -154,11 +139,11 @@ const Restaurant = ({ route, favRestaurants, dispatch }) => {
 
 const mapStateToProps = (state) => {
   return {
-    favRestaurants: state.favRestaurantsID
+    watchedMovies: state.watchedMoviesID
   }
 }
 
-export default connect(mapStateToProps)(Restaurant);
+export default connect(mapStateToProps)(Movie);
 
 const styles = StyleSheet.create({
   container: {
@@ -188,7 +173,7 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: 'white',
   },
-  containerNoRestaurantImage: {
+  containerNoMovieImage: {
     height: 128,
     alignItems: 'center',
     justifyContent: 'center',
@@ -196,7 +181,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 3,
     backgroundColor: 'white',
   },
-  restaurantImage: {
+  MovieImage: {
     height: 180,
     borderTopLeftRadius: 3,
     borderTopRightRadius: 3,

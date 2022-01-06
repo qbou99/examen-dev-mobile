@@ -3,9 +3,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View } from 'react-native';
 
-import Map from '../components/Map';
-import Restaurant from '../components/Restaurant';
-import FavRestaurants from '../components/FavRestaurants';
+import Search from '../components/Search';
+import Movie from '../components/Movie';
+import WatchList from '../components/WatchList';
 
 const SearchNavigation = createStackNavigator();
 const FavNavigation = createStackNavigator();
@@ -18,13 +18,13 @@ function searchStackScreens() {
     >
       <SearchNavigation.Screen
         name="ViewSearch"
-        component={Map}
+        component={Search}
         options={{ title: 'Recherche' }}
       />
       <SearchNavigation.Screen
-        name="ViewRestaurant"
-        component={Restaurant}
-        options={{ title: 'Restaurant' }}
+        name="ViewMovie"
+        component={Movie}
+        options={{ title: 'Movie' }}
       />
     </SearchNavigation.Navigator>
   )
@@ -37,13 +37,13 @@ function favStackScreens() {
     >
       <FavNavigation.Screen
         name="ViewFav"
-        component={FavRestaurants}
+        component={WatchList}
         options={{ title: 'Favoris' }}
       />
       <FavNavigation.Screen
-        name="ViewRestaurant"
-        component={Restaurant}
-        options={{ title: 'Restaurant' }}
+        name="ViewMovie"
+        component={Movie}
+        options={{ title: 'Movie' }}
       />
     </FavNavigation.Navigator>
   )
