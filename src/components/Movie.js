@@ -31,7 +31,7 @@ const Movie = ({ route, watchedMovies, dispatch }) => {
 
   // On pourrait définir les actions dans un fichier à part
   const saveMovie = async () => {
-    const action = { type: 'SAVE_MOVIE', value: route.params.MovieID };
+    const action = { type: 'SAVE_MOVIE', value: route.params.movieID };
     dispatch(action);
     let toast = Toast.show('Movie ajouté aux favoris', {
       duration: Toast.durations.LONG,
@@ -39,7 +39,7 @@ const Movie = ({ route, watchedMovies, dispatch }) => {
   }
 
   const unsaveMovie = async () => {
-    const action = { type: 'UNSAVE_MOVIE', value: route.params.MovieID };
+    const action = { type: 'UNSAVE_MOVIE', value: route.params.movieID };
     dispatch(action);
     let toast = Toast.show('Movie retiré des favoris', {
       duration: Toast.durations.LONG,
@@ -60,7 +60,7 @@ const Movie = ({ route, watchedMovies, dispatch }) => {
   };
 
   const displaySaveMovie = () => {
-    if (watchedMovies.findIndex(i => i === route.params.MovieID) !== -1) {
+    if (watchedMovies.findIndex(i => i === route.params.movieID) !== -1) {
       // Le Movie est sauvegardé
       return (
         <Button

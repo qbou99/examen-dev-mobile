@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import MovielistItem from './MovieListItem';
 import DisplayError from './DisplayError';
 
+import { getMovieDetails } from '../api/TMDB';
+
 const WatchList = ({ navigation, watchedMovies }) => {
 
   const [movies, setMovies] = useState([]);
@@ -20,7 +22,10 @@ const WatchList = ({ navigation, watchedMovies }) => {
     setIsError(false);
     let movies = [];
     try {
-
+      for (const id of watchedMovies) {
+        const tmdbResult = await getMovieDetails(id)
+        movies.push(tmdbResult);
+      };
       setMovies(movies);
     } catch (error) {
       setIsError(true);
@@ -29,36 +34,23 @@ const WatchList = ({ navigation, watchedMovies }) => {
     setIsRefreshing(false);
   };
 
-  const navigateToMovieDetails = (MovieID) => {
-    navigation.navigate("ViewMovie", { MovieID });
-  };
-
-  const amIWatched = (MovieID) => {
-    if (watchedMovies.findIndex(i => i === MovieID) !== -1) {
-      return true;
-    }
-    return false;
+  const navigateToMovieDetails = (movieID) => {
+    navigation.navigate("ViewMovie", { movieID });
   };
 
   return (
     <View style={styles.container}>
-      {
-        isError ?
-          (<DisplayError message='Impossible de récupérer les movies favoris' />) :
-          (<FlatList
+        <FlatList
             data={movies}
-            extraData={watchedMovies}
             keyExtractor={(item) => item.id?.toString()}
             renderItem={({ item }) => (
               <MovielistItem
                 movieData={item}
-                onClick={navigateToMovieDetails}
-                isFav={amIWatched(item.id)} />
+                onClick={navigateToMovieDetails} />
             )}
             refreshing={isRefreshing}
             onRefresh={refreshWatchList}
-          />)
-      }
+          />
     </View>
   );
 };
