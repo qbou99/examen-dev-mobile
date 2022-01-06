@@ -18,8 +18,8 @@
 
 Merci d'indiquer si vous avez fait l'exercice sur téléphone ou émulateur. 
 
-Exercice réalisé sur téléphone Android
+>Exercice réalisé sur téléphone Android
 
 Ajouter vos remarques ici si besoin
 
-/
+>/
