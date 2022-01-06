@@ -47,12 +47,12 @@ const Movie = ({ route, watchedMovies, dispatch }) => {
   }
 
   const displayMovieImage = () => {
-    /*if (Movie.featured_image) {
+    if (movie.poster_path) {
       return (
         <Image style={styles.MovieImage}
-          source={{ uri: Movie.featured_image }} />
+          source={{ uri: 'https://image.tmdb.org/t/p/w500' + movie.poster_path }} />
       );
-    };*/
+    };
     return (
       <View style={styles.containerNoMovieImage}>
       </View>
@@ -92,10 +92,7 @@ const Movie = ({ route, watchedMovies, dispatch }) => {
                 <Text style={styles.textName}>
                   {movie.title}
                 </Text>
-                <Text style={styles.textContent}
-                  numberOfLines={1}>
-                  {movie.establishment?.join()}
-                </Text>
+                {displaySaveMovie()}
               </View>
             </View>
             <View style={styles.containerCardBottom}>
@@ -129,7 +126,6 @@ const Movie = ({ route, watchedMovies, dispatch }) => {
               <Text style={styles.textContent}>
                 {credits.reduce((previousValue, currentValue) => previousValue + ', ' + currentValue.name, "").substring(2)}
               </Text>
-              {displaySaveMovie()}
             </View>
           </ScrollView>)
         )}
@@ -168,7 +164,7 @@ const styles = StyleSheet.create({
   },
   containerCardBottom: {
     elevation: 1,
-    marginTop: 16,
+    marginVertical: 16,
     borderRadius: 3,
     padding: 12,
     backgroundColor: 'white',
@@ -182,7 +178,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   MovieImage: {
-    height: 180,
+    height: 460,
     borderTopLeftRadius: 3,
     borderTopRightRadius: 3,
   },

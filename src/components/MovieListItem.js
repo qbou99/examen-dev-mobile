@@ -4,11 +4,11 @@ import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 const MovieListItem = ({ onClick, movieData }) => {
 
   const getThumbnail = () => {
-    /*if (movieData.thumb) {
+    if (movieData.poster_path) {
       return (
-        <Image style={styles.thumbnail} source={{ uri: movieData.thumb }} />
+        <Image style={styles.thumbnail} source={{ uri: 'https://image.tmdb.org/t/p/w500' + movieData.poster_path }} />
       );
-    };*/
+    };
     return (
       <View style={styles.noThumbnailContainer}>
       </View>
@@ -71,14 +71,14 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   noThumbnailContainer: {
-    width: 128,
-    height: 128,
+    width: 100,
+    height: 150,
     alignItems: 'center',
     justifyContent: 'center',
   },
   thumbnail: {
-    width: 128,
-    height: 128,
+    width: 100,
+    height: 150,
     borderRadius: 12,
   },
   title: {

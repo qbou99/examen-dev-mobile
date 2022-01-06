@@ -68,7 +68,7 @@ const Search = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
-        <View>
+        <View style={{flexDirection: 'row', paddingBottom: 5}}>
           <TextInput
             placeholder='Nom du film'
             style={styles.inputMovieName}
@@ -122,5 +122,6 @@ const styles = StyleSheet.create({
   },
   inputMovieName: {
     marginBottom: 8,
+    flex: 1
   },
 });
